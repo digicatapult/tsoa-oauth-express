@@ -1,0 +1,8 @@
+{
+  "timeout": 50000,
+  "exit": true,
+  "extension": "ts",
+  "node-option": [
+    "import=tsimp/import"
+  ]
+}

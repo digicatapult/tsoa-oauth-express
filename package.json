@@ -1,0 +1,47 @@
+{
+  "name": "@digicatapult/tsoa-oauth-express",
+  "version": "0.1.0",
+  "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
+  "main": "build/index.js",
+  "type": "commonjs",
+  "exports": {
+    "import": "./build/index.mjs",
+    "require": "./build/index.js"
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "check": "npm run example:build && tsc -p ./tsconfig.check.json",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --config ./mocharc.json ./src/**/*.test.ts",
+    "depcheck": "depcheck",
+    "lint": "prettier -c ./src",
+    "lint:fix": "npm run lint -- -w",
+    "example:build": "tsoa spec-and-routes -c ./example/tsoa.json",
+    "example": "npm run example:build && node --import=tsimp/import ./example/index.ts"
+  },
+  "author": "Digital Catapult",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "express": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.16",
+    "@types/express": "^4.17.21",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.12.11",
+    "chai": "^5.1.0",
+    "depcheck": "^1.4.7",
+    "mocha": "^10.4.0",
+    "mock-jwks": "^3.1.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "tsimp": "^2.0.11",
+    "tsoa": "^6.2.1",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0"
+  }
+}
