@@ -12,6 +12,7 @@
     "build"
   ],
   "scripts": {
+    "build": "tsc",
     "check": "npm run example:build && tsc -p ./tsconfig.check.json",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --config ./mocharc.json ./src/**/*.test.ts",
     "depcheck": "depcheck",
