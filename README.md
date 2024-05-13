@@ -102,5 +102,3 @@ causes the call to succeed:
 ```json
 { "message": "This route is authenticated", "authenticated": true }
 ```
-
-> > > > > > > a91c829 (First version of auth handler library)
