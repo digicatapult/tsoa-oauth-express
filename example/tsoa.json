@@ -1,0 +1,27 @@
+{
+  "entryFile": "example/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+    "example/controllers/*.ts"
+  ],
+  "spec": {
+    "outputDirectory": "example",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "http://localhost:3080/realms/example/protocol/openid-connect/auth",
+            "tokenUrl": "http://localhost:3080/realms/example/protocol/openid-connect/token",
+            "scopes": []
+          }
+        }
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "example",
+    "authenticationModule": "./example/authentication.ts"
+  }
+}
