@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/tsoa-oauth-express",
-  "version": "0.1.43",
+  "version": "0.1.44",
   "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
   "main": "build/index.js",
   "type": "commonjs",
@@ -24,7 +24,7 @@
   "author": "Digital Catapult",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "express": "^4.20.0"
+    "express": "^4.21.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.19",
