@@ -19,7 +19,7 @@
     "lint": "prettier -c ./src",
     "lint:fix": "npm run lint -- -w",
     "example:build": "tsoa spec-and-routes -c ./example/tsoa.json",
-    "example": "npm run example:build && node --import=tsimp/import ./example/index.ts"
+    "example": "npm run example:build && node --import=@digicatapult/tsimp/import ./example/index.ts"
   },
   "author": "Digital Catapult",
   "license": "Apache-2.0",
