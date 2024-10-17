@@ -116,3 +116,27 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+  
+  publish:
+    name: 'Publish release'
+    needs: [publish-npm, check-version]
+    runs-on: ubuntu-latest
+    if: ${{ needs.check-version.outputs.is_new_version == 'true' }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      # Build github release
+      - name: Build release version
+        uses: 'marvinpinto/action-automatic-releases@latest'
+        with:
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          automatic_release_tag: ${{ needs.check-version.outputs.version }}
+          prerelease: false
+          title: Release ${{ needs.check-version.outputs.version }}
+      - name: Build release latest
+        uses: 'marvinpinto/action-automatic-releases@latest'
+        with:
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          automatic_release_tag: latest
+          prerelease: false
+          title: Latest Release ${{ needs.check-version.outputs.version }}
