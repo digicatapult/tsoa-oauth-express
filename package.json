@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/tsoa-oauth-express",
-  "version": "0.1.58",
+  "version": "0.1.59",
   "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
   "main": "build/index.js",
   "type": "commonjs",
@@ -30,7 +30,7 @@
     "@types/chai": "^5.0.0",
     "@types/express": "^4.17.21",
     "@types/mocha": "^10.0.9",
-    "@types/node": "^20.16.12",
+    "@types/node": "^20.16.13",
     "chai": "^5.1.1",
     "depcheck": "^1.4.7",
     "mocha": "^10.7.3",
