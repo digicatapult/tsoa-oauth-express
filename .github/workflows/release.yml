@@ -11,6 +11,7 @@ jobs:
     uses: digicatapult/shared-workflows/.github/workflows/tests-npm.yml@main
     with:
       tests: '["test"]'
+      docker_compose_file: ""
   release-npm:
     needs: [static-checks-npm, tests-npm]
     uses: digicatapult/shared-workflows/.github/workflows/release-module-npm.yml@main

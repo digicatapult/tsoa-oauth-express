@@ -11,5 +11,6 @@ jobs:
     uses: digicatapult/shared-workflows/.github/workflows/tests-npm.yml@main
     with:
       tests: '["test"]'
+      docker_compose_file: ""
   check-version:
     uses: digicatapult/shared-workflows/.github/workflows/check-version.yml@main
