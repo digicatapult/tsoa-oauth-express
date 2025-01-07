@@ -16,13 +16,23 @@ jobs:
     needs: [static-checks-npm, tests-npm]
     uses: digicatapult/shared-workflows/.github/workflows/release-module-npm.yml@main
     with:
-      npm_build: true
+      npm_build_command: npm run build
     permissions:
       contents: write
+      packages: write
     secrets:
       REGISTRY_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+  release-gh-packages:
+    needs: [static-checks-npm, tests-npm]
+    uses: digicatapult/shared-workflows/.github/workflows/release-module-npm.yml@main
+    with:
+      npm_build_command: npm run build 
+      registry_url: 'https://npm.pkg.github.com'
+    permissions:
+      contents: write
+      packages: write
   release-github:
-    needs: [release-npm]
+    needs: [release-npm, release-gh-packages]
     uses: digicatapult/shared-workflows/.github/workflows/release-github.yml@main
     permissions:
       contents: write
