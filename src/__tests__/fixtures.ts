@@ -1,12 +1,12 @@
 import type express from 'express'
 import * as jwt from 'jsonwebtoken'
+import { createJWKSMock, type JWKSMock } from 'mock-jwks'
 import { AuthOptions } from '../index.js'
 
 export function withMockJwks() {
-  let jwksMockImportP = import('mock-jwks')
-  let jwksMock: ReturnType<Awaited<typeof jwksMockImportP>['default']>
+  let jwksMock: JWKSMock
+
   beforeEach(async function () {
-    const createJWKSMock = (await jwksMockImportP).default
     jwksMock = createJWKSMock('https://keycloak.example.com')
     jwksMock.start()
   })
