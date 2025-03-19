@@ -1,18 +1,19 @@
 import type express from 'express'
 import * as jwt from 'jsonwebtoken'
-import { createJWKSMock, type JWKSMock } from 'mock-jwks'
+import mockJwks, { type JWKSMock } from 'mock-jwks'
 import { AuthOptions } from '../index.js'
 
 export function withMockJwks() {
   let jwksMock: JWKSMock
+  let stop: () => void
 
   beforeEach(async function () {
-    jwksMock = createJWKSMock('https://keycloak.example.com')
-    jwksMock.start()
+    jwksMock = mockJwks.createJWKSMock('https://keycloak.example.com')
+    stop = jwksMock.start()
   })
 
   afterEach(function () {
-    jwksMock.stop()
+    stop && stop()
   })
 
   return {
@@ -30,5 +31,5 @@ export const testOptions: AuthOptions = {
     const scopes = ((decoded as jwt.JwtPayload).scopes as string) || ''
     return scopes.split(' ')
   },
-  tryRefreshTokens: (_req: express.Request) => Promise.resolve(true),
+  tryRefreshTokens: (_req: express.Request) => Promise.resolve(false),
 }
