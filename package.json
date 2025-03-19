@@ -10,7 +10,7 @@
   "scripts": {
     "build": "swc ./src -d ./build --strip-leading-paths --copy-files && tsc -p ./tsconfig.build.json",
     "check": "npm run example:build && tsc",
-    "test": "SWCRC=true NODE_ENV=test ./node_modules/.bin/mocha --config ./mocharc.json ./src/**/*.test.ts",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha --config ./mocharc.json ./src/**/*.test.ts",
     "depcheck": "depcheck",
     "lint": "prettier -c ./src",
     "lint:fix": "npm run lint -- -w",
