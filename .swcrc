@@ -17,7 +17,7 @@
   "exclude": [
     "/__tests__/"
   ],
-  "sourceMaps": true,
+  "sourceMaps": "inline",
   "isModule": true,
   "minify": false
 }

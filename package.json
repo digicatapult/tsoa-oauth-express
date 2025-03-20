@@ -4,6 +4,7 @@
   "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
   "main": "build/index.js",
   "type": "module",
+  "types": "build/index.d.ts",
   "files": [
     "build"
   ],
