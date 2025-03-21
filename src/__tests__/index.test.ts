@@ -1,22 +1,18 @@
 import type express from 'express'
 
+import { expect } from 'chai'
 import { describe, test } from 'mocha'
 
-import mkExpressAuthentication, { OauthError } from '../index.js'
+import mkExpressAuthentication, { AggregateOAuthError, mergeAcceptAny, OauthError, TsoaExpressUser } from '../index.js'
 import { testOptions, withMockJwks } from './fixtures.js'
 
 describe('expressAuthenticator', function () {
-  let expect: Chai.ExpectStatic
-  before(async () => {
-    expect = (await import('chai')).expect
-  })
-
   const { getJwksMock } = withMockJwks()
 
   test('with security !== oauth2 should throw ForbiddenError ', async function () {
     const expressAuthenticator = mkExpressAuthentication(testOptions)
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator({} as express.Request, 'reconfigured')
     } catch (err) {
@@ -30,7 +26,7 @@ describe('expressAuthenticator', function () {
   test('with no token should error', async function () {
     const expressAuthenticator = mkExpressAuthentication(testOptions)
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator({ headers: {} } as express.Request, 'oauth2')
     } catch (err) {
@@ -44,21 +40,18 @@ describe('expressAuthenticator', function () {
   test('with valid token should succeed', async function () {
     const expressAuthenticator = mkExpressAuthentication(testOptions)
 
-    let error: any
-    try {
-      await expressAuthenticator(
-        {
-          headers: {
-            authorization: `Bearer ${getJwksMock().token()}`,
-          },
-        } as express.Request,
-        'oauth2'
-      )
-    } catch (err) {
-      error = err
-    }
+    let result: TsoaExpressUser
+    result = await expressAuthenticator(
+      {
+        headers: {
+          authorization: `Bearer ${getJwksMock().token()}`,
+        },
+      } as express.Request,
+      'oauth2'
+    )
 
-    expect(error).equal(undefined)
+    expect(result.securityName).equal('oauth2')
+    expect(result.jwt).to.have.property('iat')
   })
 
   test('with security === reconfigured should succeed', async function () {
@@ -67,7 +60,7 @@ describe('expressAuthenticator', function () {
       securityName: 'reconfigured',
     })
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -92,7 +85,7 @@ describe('expressAuthenticator', function () {
       },
     })
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -117,7 +110,7 @@ describe('expressAuthenticator', function () {
       },
     })
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -141,7 +134,7 @@ describe('expressAuthenticator', function () {
       tryRefreshTokens: undefined,
     })
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -160,9 +153,12 @@ describe('expressAuthenticator', function () {
   })
 
   test('with expired token should refresh and then succeed', async function () {
-    const expressAuthenticator = mkExpressAuthentication(testOptions)
+    const expressAuthenticator = mkExpressAuthentication({
+      ...testOptions,
+      tryRefreshTokens: () => Promise.resolve(getJwksMock().token()),
+    })
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -182,10 +178,10 @@ describe('expressAuthenticator', function () {
   test('with unsuccessful refresh should error', async function () {
     const expressAuthenticator = mkExpressAuthentication({
       ...testOptions,
-      tryRefreshTokens: () => Promise.resolve(false),
+      tryRefreshTokens: () => Promise.resolve(false as const),
     })
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -206,7 +202,7 @@ describe('expressAuthenticator', function () {
   test('with all required scopes should succeed', async function () {
     const expressAuthenticator = mkExpressAuthentication(testOptions)
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -227,7 +223,7 @@ describe('expressAuthenticator', function () {
   test('with excess scopes should succeed', async function () {
     const expressAuthenticator = mkExpressAuthentication(testOptions)
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -248,7 +244,7 @@ describe('expressAuthenticator', function () {
   test('with missing scope should error', async function () {
     const expressAuthenticator = mkExpressAuthentication(testOptions)
 
-    let error: any
+    let error: unknown
     try {
       await expressAuthenticator(
         {
@@ -265,5 +261,97 @@ describe('expressAuthenticator', function () {
 
     expect(error).instanceOf(OauthError)
     expect((error as OauthError).reason).to.equal('MISSING_SCOPES')
+  })
+})
+
+describe('mergeAcceptAny', function () {
+  const { getJwksMock } = withMockJwks()
+
+  test('succeeds with single securityType', async function () {
+    const expressAuthenticator = mergeAcceptAny([mkExpressAuthentication(testOptions)])
+
+    let result: TsoaExpressUser
+    result = await expressAuthenticator(
+      {
+        headers: {
+          authorization: `Bearer ${getJwksMock().token()}`,
+        },
+      } as express.Request,
+      'oauth2'
+    )
+
+    expect(result.securityName).equal('oauth2')
+    expect(result.jwt).to.have.property('iat')
+  })
+
+  test('succeeds with first securityType', async function () {
+    const expressAuthenticator = mergeAcceptAny([
+      mkExpressAuthentication({ ...testOptions, verifyOptions: { subject: 'first' }, securityName: 'first' }),
+      mkExpressAuthentication({ ...testOptions, verifyOptions: { subject: 'second' }, securityName: 'second' }),
+    ])
+
+    let result: TsoaExpressUser
+    result = await expressAuthenticator(
+      {
+        headers: {
+          authorization: `Bearer ${getJwksMock().token({ sub: 'first' })}`,
+        },
+      } as express.Request,
+      'first'
+    )
+
+    expect(result.securityName).equal('first')
+    expect(result.jwt).to.have.property('iat')
+  })
+
+  test('succeeds with second securityType', async function () {
+    const expressAuthenticator = mergeAcceptAny([
+      mkExpressAuthentication({ ...testOptions, verifyOptions: { subject: 'first' }, securityName: 'first' }),
+      mkExpressAuthentication({ ...testOptions, verifyOptions: { subject: 'second' }, securityName: 'second' }),
+    ])
+
+    let result: TsoaExpressUser
+    result = await expressAuthenticator(
+      {
+        headers: {
+          authorization: `Bearer ${getJwksMock().token({ sub: 'second' })}`,
+        },
+      } as express.Request,
+      'second'
+    )
+
+    expect(result.securityName).equal('second')
+    expect(result.jwt).to.have.property('iat')
+  })
+
+  test('fails with AggregateOAuthError is both fail', async function () {
+    const expressAuthenticator = mergeAcceptAny([
+      mkExpressAuthentication({ ...testOptions, verifyOptions: { subject: 'first' }, securityName: 'first' }),
+      mkExpressAuthentication({ ...testOptions, verifyOptions: { subject: 'second' }, securityName: 'second' }),
+    ])
+
+    let error: unknown
+    try {
+      await expressAuthenticator(
+        {
+          headers: {
+            authorization: `Bearer ${getJwksMock().token({ sub: 'third' })}`,
+          },
+        } as express.Request,
+        'third'
+      )
+    } catch (err) {
+      error = err
+    }
+
+    expect(error).instanceOf(AggregateOAuthError)
+    if (!(error instanceof AggregateOAuthError)) {
+      throw new Error('Should never happen')
+    }
+    expect(error.errors.length).equal(2)
+    expect(error.errors[0]).instanceOf(OauthError)
+    expect((error.errors[0] as OauthError).reason).equal('INVALID_SECURITY_TYPE')
+    expect(error.errors[1]).instanceOf(OauthError)
+    expect((error.errors[1] as OauthError).reason).equal('INVALID_SECURITY_TYPE')
   })
 })

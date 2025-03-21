@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2023"
+    ],
+    "module": "node16",
+    "target": "ES2023",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "sourceMap": true,
@@ -12,8 +14,12 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "outDir": "build"
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["src"],
-  "exclude": ["**/__tests__"]
+  "include": [
+    "src",
+    "example"
+  ]
 }

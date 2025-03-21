@@ -1,8 +1,6 @@
 {
-  "timeout": 50000,
+  "timeout": 5000,
   "exit": true,
   "extension": "ts",
-  "node-option": [
-    "import=@digicatapult/tsimp/import"
-  ]
+  "node-option": ["import=@swc-node/register/esm-register"]
 }

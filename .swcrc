@@ -1,0 +1,23 @@
+{
+  "$schema": "https://swc.rs/schema.json",
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true,
+      "dynamicImport": true,
+      "importMeta": true
+    },
+    "transform": {
+      "decoratorMetadata": true,
+      "legacyDecorator": true,
+      "useDefineForClassFields": true
+    },
+    "target": "es2022"
+  },
+  "exclude": [
+    "/__tests__/"
+  ],
+  "sourceMaps": "inline",
+  "isModule": true,
+  "minify": false
+}

@@ -1,10 +1,13 @@
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import express, { Express } from 'express'
 
 import { OauthError } from '../src/index.js'
 import { RegisterRoutes } from './routes.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 async function run(): Promise<void> {
   const swaggerBuffer = await fs.readFile(path.join(__dirname, './swagger.json'))
