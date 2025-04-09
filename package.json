@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/tsoa-oauth-express",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
   "main": "build/index.js",
   "type": "module",
