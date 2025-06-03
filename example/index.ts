@@ -14,7 +14,9 @@ async function run(): Promise<void> {
   const swaggerJson = JSON.parse(swaggerBuffer.toString('utf8'))
 
   const app: Express = express()
-  app.get('/api-docs', (_req, res) => res.json(swaggerJson))
+  app.get('/api-docs', (_req, res) => {
+    res.json(swaggerJson)
+  })
 
   RegisterRoutes(app)
 
@@ -23,7 +25,7 @@ async function run(): Promise<void> {
     _req: express.Request,
     res: express.Response,
     _next: express.NextFunction
-  ): express.Response | void {
+  ): void {
     if (err instanceof OauthError) {
       res.status(401)
       res.send({
