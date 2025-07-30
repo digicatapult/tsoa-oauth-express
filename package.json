@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/tsoa-oauth-express",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
   "main": "build/index.js",
   "type": "module",
@@ -35,7 +35,7 @@
     "mocha": "^11.7.1",
     "mock-jwks": "^3.3.5",
     "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-organize-imports": "^4.2.0",
     "tsoa": "^6.6.0",
     "typescript": "^5.8.3"
   },
