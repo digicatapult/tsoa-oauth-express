@@ -35,7 +35,7 @@
     "mocha": "^11.7.1",
     "mock-jwks": "^3.3.5",
     "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-organize-imports": "^4.2.0",
     "tsoa": "^6.6.0",
     "typescript": "^5.8.3"
   },
