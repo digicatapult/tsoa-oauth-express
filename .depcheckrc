@@ -1,1 +1,1 @@
-ignores: ['prettier-plugin-organize-imports', '@swc-node/register']
+ignores: ['prettier-plugin-organize-imports', '@swc-node/register', '@swc/core']
