@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/tsoa-oauth-express",
-  "version": "2.0.43",
+  "version": "2.0.44",
   "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
   "main": "build/index.js",
   "type": "module",
@@ -26,9 +26,9 @@
   "devDependencies": {
     "@swc-node/register": "^1.11.1",
     "@swc/cli": "^0.7.8",
-    "@swc/core": "^1.13.20",
+    "@swc/core": "^1.13.21",
     "@types/chai": "^5.2.3",
-    "@types/express": "^5.0.3",
+    "@types/express": "^5.0.4",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.23",
     "chai": "^6.2.0",
