@@ -32,6 +32,7 @@ jobs:
     permissions:
       contents: write
       packages: write
+      id-token: write
   release-github:
     needs: [release-npm, release-gh-packages]
     uses: digicatapult/shared-workflows/.github/workflows/release-github.yml@main
