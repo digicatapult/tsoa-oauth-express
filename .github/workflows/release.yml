@@ -36,6 +36,8 @@ jobs:
   release-github:
     needs: [release-npm, release-gh-packages]
     uses: digicatapult/shared-workflows/.github/workflows/release-github.yml@main
+    with:
+      get_sbom: false
     permissions:
       contents: write
       pull-requests: read
