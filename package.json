@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/tsoa-oauth-express",
-  "version": "2.0.62",
+  "version": "2.0.63",
   "description": "Authentication handler for TSOA using OAuth2 JWT tokens",
   "repository": {
     "type": "git",
@@ -46,6 +46,6 @@
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.3",
-    "jwks-rsa": "^3.2.2"
+    "jwks-rsa": "^4.0.1"
   }
 }
